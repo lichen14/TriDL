@@ -1,5 +1,5 @@
-# RenderUNet-Pytorch
-Official Pytorch Implementation for Render U-Net
+# TriDL-Pytorch
+Official Pytorch Implementation for TriDL
 
 Codes and pre-trained models will be released soon.
 
