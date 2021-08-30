@@ -8,7 +8,7 @@ edge segmentation, and mutually boost every task through complementary training 
 ## Paper
 ![](./display/framework.pdf)
 
-If you find this code useful for your research, please cite our [paper](https://arxiv.org/abs/1811.12833):
+If you find this code useful for your research, please cite our [paper](https://arxiv.org):
 
 ```
 @inproceedings{li2021tridl,
@@ -76,7 +76,7 @@ $ pip uninstall TriDL
 * Initial pre-trained model can be downloaded from [DeepLab-V2](https://drive.google.com/open?id=1TIrTmFKqEyf3pOKniv8-53m3v9SyBK0u)
 * Transferred images for MMWHS dataset can be found:
   * [MRI as CT (MMWHS)_need updation](https://drive.google.com/open?id=1OBvYVz2ND4ipdfnkhSaseT8yu2ru5n5l)
-  * 
+  
 ## Running the code
 The well-trained model can be downloaded here [TriDL_deeplab](https://drive.google.com/open?id=1uNIydmPONNh29PeXqCb9MGRAnCWxAu99). You can use the pre-trained model or your own model to make a test as following:
 ```bash
