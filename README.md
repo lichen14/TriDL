@@ -6,7 +6,7 @@ Official Pytorch Implementation for TriDL.
 edge segmentation, and mutually boost every task through complementary training in each iteration. this work was proposed to solve domain shift in the task of medical image semantic segmentation.
 
 ## Paper
-![](./display/framework.pdf)
+![](https://github.com/lichen14/TriDL/blob/master/display/framework.png)
 
 If you find this code useful for your research, please cite our [paper](https://arxiv.org):
 
@@ -17,7 +17,7 @@ If you find this code useful for your research, please cite our [paper](https://
 }
 ```
 ## Demo
-[![](./display/introduction.pdf)
+[![](https://github.com/lichen14/TriDL/blob/master/display/introduction.png)
 
 ## Preparation
 ### Requirements
