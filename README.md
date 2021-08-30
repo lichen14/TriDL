@@ -2,7 +2,6 @@
 Official Pytorch Implementation for TriDL.
 
 ## Updates
-- *02/2021*: Using CycleGAN translated images, The AdvEnt model achieves (**46.3%**) on GTA5-2-Cityscapes
 - *08/2021*: Check out our paper [Tri-Directional Tasks Complementary Learning for Unsupervised Domain Adaptation of Cross-modality Medical Image Semantic Segmentation] (submitted to BIBM 2021). With the Tri-directional learning framework, we synergize image style transformation, mask segmentation and
 edge segmentation, and mutually boost every task through complementary training in each iteration. this work was proposed to solve domain shift in the task of medical image semantic segmentation.
 
