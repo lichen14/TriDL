@@ -68,6 +68,7 @@ $ pip uninstall TriDL
 * An alternative option is to explicitlly specify the parameters ```DATA_DIRECTORY_SOURCE``` and ```DATA_DIRECTORY_TARGET``` in YML configuration files.
 * Download the [MMWHS Dataset](http://www.sdspeople.fudan.edu.cn/zhuangxiahai/0/mmwhs/), the MRI dataset is used as source domain dataset while the CT dataset for target domain dataset. (For participants who want to download and use the data, they need to agree with the conditions above and the terms in the registration form in above website.)
 * After download, The MMWHS dataset directory should have this basic structure:
+```
     .
     ├── datasets                   
     |   ├── <dataset_name>         # i.e. MRI2CT
@@ -77,7 +78,8 @@ $ pip uninstall TriDL
     |   |   └── test               # Testing
     |   |   |   ├── A              # Contains domain A images (i.e. MRI)
     |   |   |   └── B              # Contains domain B images (i.e. CT)
-    
+ ```
+
 ### Pre-trained models and translated images 
 * Initial pre-trained model can be downloaded from [DeepLab-V2](https://drive.google.com/open?id=1TIrTmFKqEyf3pOKniv8-53m3v9SyBK0u)
   
@@ -97,7 +99,9 @@ python -m visdom.server
 tensorboard --logdir=<your_tfb_log_dir>
 ```
 * You can also view the training progress as well as live output images by running ```python3 -m visdom``` in another terminal and opening [http://localhost:8097/](http://localhost:8097/) in your favourite web browser. This would show training loss progress and translated images.
+
 ![](https://github.com/lichen14/TriDL/blob/master/display/visdom.png)
+
 * Following command will start a training session using the images under the *dataroot/train* directory with the hyperparameters that showed best results according to CycleGAN authors. You are free to change those hyperparameters, see ```python train_tfb.py --help``` for a description of those.
 ```
 cd <root_dir>/PyTorch-CycleGAN-cleaner/PyTorch-CycleGAN-master
