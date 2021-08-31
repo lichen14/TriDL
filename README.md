@@ -107,9 +107,9 @@ tensorboard --logdir=<your_tfb_log_dir>
 cd <root_dir>/PyTorch-CycleGAN-cleaner/PyTorch-CycleGAN-master
 python train_tfb.py --dataroot datasets/<dataset_name>/ --cuda --name <your_name> --batchsize N
 ```
-** Both generators and discriminators weights will be saved under the output directory.
-** If you don't own a GPU remove the --cuda option, although I advise you to get one!
-** Taking my command as an example:
+* Both generators and discriminators weights will be saved under the output directory.
+* If you don't own a GPU remove the --cuda option, although I advise you to get one!
+* Taking my command as an example:
 ```
 python train_tfb.py --dataroot /home/lc/Study/Project/PyTorch-CycleGAN-cleaner/PyTorch-CycleGAN-master/datasets/MRI2CT/ --cuda --name <MRI2CT-UDA-1> --batchsize 4
 ```
