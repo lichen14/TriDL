@@ -55,8 +55,8 @@ Follow the instructions in [pytorch.org](http://pytorch.org) for your current se
 
 4. Install [Visdom](https://github.com/facebookresearch/visdom)
 To plot loss graphs and draw images in a nice web browser view
-```
-pip3 install visdom
+```bash
+$ pip install visdom
 ```
 5. Optional. To uninstall this package, run:
 ```bash
