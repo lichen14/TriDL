@@ -17,7 +17,7 @@ If you find this code useful for your research, please cite our [paper](https://
 }
 ```
 ## Demo
-[![](https://github.com/lichen14/TriDL/blob/master/display/introduction.png)
+![](https://github.com/lichen14/TriDL/blob/master/display/introduction.png)
 
 ## Preparation
 ### Requirements
@@ -50,7 +50,15 @@ $ pip install -e <root_dir>
 ```
 With this, you can edit the TriDL code on the fly and import function 
 and classes of TriDL in other project as well.
-3. Optional. To uninstall this package, run:
+3. Install [PyTorch & torchvision](http://pytorch.org/)
+Follow the instructions in [pytorch.org](http://pytorch.org) for your current setup
+
+4. Install [Visdom](https://github.com/facebookresearch/visdom)
+To plot loss graphs and draw images in a nice web browser view
+```
+pip3 install visdom
+```
+5. Optional. To uninstall this package, run:
 ```bash
 $ pip uninstall TriDL
 ```
@@ -60,53 +68,95 @@ $ pip uninstall TriDL
 * An alternative option is to explicitlly specify the parameters ```DATA_DIRECTORY_SOURCE``` and ```DATA_DIRECTORY_TARGET``` in YML configuration files.
 * Download the [MMWHS Dataset](http://www.sdspeople.fudan.edu.cn/zhuangxiahai/0/mmwhs/), the MRI dataset is used as source domain dataset while the CT dataset for target domain dataset. (For participants who want to download and use the data, they need to agree with the conditions above and the terms in the registration form in above website.)
 * After download, The MMWHS dataset directory should have this basic structure:
-```bash
-<root_dir>/dataset/mri_dataset/                               % MRI samples root
-<root_dir>/dataset/mri_dataset/train/image/                   % MRI images
-<root_dir>/dataset/mri_dataset/train/label/                   % MRI annotation
-<root_dir>/dataset/mri_list/                                  % MRI samples list
-
-<root_dir>/dataset/ct_dataset/                                % CT samples root
-<root_dir>/dataset/ct_dataset/train/image/                    % CT images
-<root_dir>/dataset/ct_dataset/train/label/                    % CT annotation
-<root_dir>/dataset/ct_list/                                   % CT samples list
-...
-```
-### Pre-trained models
+    .
+    ├── datasets                   
+    |   ├── <dataset_name>         # i.e. MRI2CT
+    |   |   ├── train              # Training
+    |   |   |   ├── A              # Contains domain A images (i.e. MRI)
+    |   |   |   └── B              # Contains domain B images (i.e. CT)
+    |   |   └── test               # Testing
+    |   |   |   ├── A              # Contains domain A images (i.e. MRI)
+    |   |   |   └── B              # Contains domain B images (i.e. CT)
+    
+### Pre-trained models and translated images 
 * Initial pre-trained model can be downloaded from [DeepLab-V2](https://drive.google.com/open?id=1TIrTmFKqEyf3pOKniv8-53m3v9SyBK0u)
-* Transferred images for MMWHS dataset can be found:
-  * [MRI as CT (MMWHS)_need updation](https://drive.google.com/open?id=1OBvYVz2ND4ipdfnkhSaseT8yu2ru5n5l)
   
-## Running the code
-The well-trained model can be downloaded here [TriDL_deeplab](https://drive.google.com/open?id=1uNIydmPONNh29PeXqCb9MGRAnCWxAu99). You can use the pre-trained model or your own model to make a test as following:
+## Evaluation
+* The well-trained model can be downloaded here [TriDL_deeplab](https://pan.baidu.com/s/1LUNAVwJXp8T0PPceG2QnMg)（password:wcn8）. 
+* You can use the pre-trained model or your own model to make a test as following:
 ```bash
-$ cd <root_dir>/advent
+$ cd <root_dir>/tridl
 $ python test.py --cfg ./configs/<your_yml_name>.yml --exp-suffix <your_define_suffix>
 ```
-### Training adaptive segmenation network in TriDL
-To ensure reproduction, the random seed has been fixed in the code. Still, you may need to train a few times to reach the comparable performance.
+## Training
 
-By default, logs and snapshots are stored in ```<root_dir>/experiments``` with this structure:
+### Training the cross-modality style translator in TriDL
+* Before training, you need open the visdom and tensorboard for visualization.
+```bash
+python -m visdom.server
+tensorboard --logdir=<your_tfb_log_dir>
+```
+* You can also view the training progress as well as live output images by running ```python3 -m visdom``` in another terminal and opening [http://localhost:8097/](http://localhost:8097/) in your favourite web browser. This would show training loss progress and translated images.
+![](https://github.com/lichen14/TriDL/blob/master/display/visdom.png)
+* Following command will start a training session using the images under the *dataroot/train* directory with the hyperparameters that showed best results according to CycleGAN authors. You are free to change those hyperparameters, see ```python train_tfb.py --help``` for a description of those.
+```
+cd <root_dir>/PyTorch-CycleGAN-cleaner/PyTorch-CycleGAN-master
+python train_tfb.py --dataroot datasets/<dataset_name>/ --cuda --name <your_name> --batchsize N
+```
+** Both generators and discriminators weights will be saved under the output directory.
+** If you don't own a GPU remove the --cuda option, although I advise you to get one!
+** Taking my command as an example:
+```
+python train_tfb.py --dataroot /home/lc/Study/Project/PyTorch-CycleGAN-cleaner/PyTorch-CycleGAN-master/datasets/MRI2CT/ --cuda --name <MRI2CT-UDA-1> --batchsize 4
+```
+### Testing the translator in TriDL
+* Following command will take the images under the *dataroot/test* directory, run them through the generators and save the output under the *output/A* and *output/B* directories. As with train, some parameters like the weights to load, can be tweaked, see ```python test.py --help``` for more information.
+```
+python test.py --dataroot datasets/<dataset_name>/ --cuda  --name <your_name> --batchsize N
+```
+* Translated images for MMWHS dataset can be found:
+  * [CT slice (from MMWHS)](https://pan.baidu.com/s/1du8Tayjrr_IK3YCzDgiQ_Q)(password:9133).
+  * We only did the MRI to CT domain adaptation in this work, so there is only translated CT images uploaded, the translated MRI images will uploaded in the further work.
+  
+### Training adaptive segmenation networks in TriDL
+* before training, the translated dataset has the following structure:
+```bash
+<root_dir>/tridl/dataset/mri_dataset/                               % MRI samples root
+<root_dir>/tridl/dataset/mri_dataset/train/image/                   % MRI images and translated images 
+<root_dir>/tridl/dataset/mri_dataset/train/label/                   % MRI annotation
+<root_dir>/tridl/dataset/mri_list/                                  % MRI samples list
+
+<root_dir>/tridl/dataset/ct_dataset/                                % CT samples root
+<root_dir>/tridl/dataset/ct_dataset/train/image/                    % CT images and translated images 
+<root_dir>/tridl/dataset/ct_dataset/train/label/                    % CT annotation
+<root_dir>/tridl/dataset/ct_list/                                   % CT samples list
+...
+```
+* To ensure reproduction, the random seed has been fixed in the code. Still, you may need to train a few times to reach the comparable performance.
+* By default, logs and snapshots are stored in ```<root_dir>/experiments``` with this structure:
 ```bash
 <root_dir>/experiments/logs
 <root_dir>/experiments/snapshots  %output and trained model are stored in this file.
 ```
-
-To train TriDL:
+* To train TriDL:
 ```bash
-$ cd <root_dir>/advent
+$ cd <root_dir>/tridl
 $ python train_MRI2CT.py --cfg ./configs/advent.yml
 $ python train.py --cfg ./configs/<your_yml_name>.yml  --exp-suffix <your_define_suffix>  --tensorboard         % using tensorboard
 ```
 
 
-### Well-trained models and our implemented methods will be released soon.
+### Well-trained models and our implemented methods can be downloaded in the links.
+* the well-trained TriDL [model](https://pan.baidu.com/s/1LUNAVwJXp8T0PPceG2QnMg)（password:wcn8）(after two round tri-directional complementary learning).
+* the half-trained TriDL [model](https://pan.baidu.com/s/1ZYb9TyTrr6C81N3WGW55xA)（password:5ndg）(after one round tri-directional complementary learning).
+* the supervised-trained [model](https://pan.baidu.com/s/19g9i_Qqwc7URY0pFBgSboA)（password:i76n）(use annotated CT images and labels to train segmentor and evaluate on the CT images).
+* the non-adaptation-trained [model](https://pan.baidu.com/s/1yRzrASgXk2qnw-vOtdHjDw)（password:1w1n）(use annotated MRI images and labels to train segmentor and evaluate on the CT images).
+* the BDL [model](https://pan.baidu.com/s/14CSfvz-bJNS1AwpATwadaw)（password:83qk）(use annotated MRI images and labels to train segmentor and evaluate on the CT images).
 
 ## Acknowledgements
-This codebase is heavily borrowed from [AdaptSegNet](https://github.com/wasidennis/AdaptSegNet) and [ADVENT](https://github.com/valeoai/ADVENT).
+This codebase is heavily borrowed from [SIFA](https://github.com/cchen-cc/SIFA) and [cyclegan](https://github.com/aitorzip/PyTorch-CycleGAN).
 Thanks to following repos for sharing and we referred some of their codes to construct TriDL:
 ### References
-- [SIFA](https://github.com/cchen-cc/SIFA)
 - [Attention-Gated-Networks](https://github.com/ozan-oktay/Attention-Gated-Networks)
 - [SegmenTron](https://github.com/LikeLy-Journey/SegmenTron)
 - [MICCAI-MMWHS-2017](http://www.sdspeople.fudan.edu.cn/zhuangxiahai/0/mmwhs/)
