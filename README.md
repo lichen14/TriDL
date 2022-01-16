@@ -8,12 +8,20 @@ edge segmentation, and mutually boost every task through complementary training 
 ## Paper
 ![](https://github.com/lichen14/TriDL/blob/master/display/framework.png)
 
-If you find this code useful for your research, please cite our [paper](https://arxiv.org):
+[Publication](https://doi.org/10.1109/BIBM52615.2021.9669615) | [Paper](https://github.com/lichen14/lichen14.github.io/blob/main/assets/publication/BIBM_TriDL.pdf) | [Slides](https://github.com/lichen14/TriDL/blob/main/display/BIBM_2021_Presentation-B221-TriDL.pdf)
+
+If you find this code useful for your research, please cite our work:
 
 ```
 @inproceedings{li2021tridl,
-  title={Tri-Directional Tasks Complementary Learning for Unsupervised Domain Adaptation of Cross-modality Medical Image Semantic Segmentation},
-  coming soon.
+  author={Li, Chen and Chen, Wei and Wu, Mingfei and Luo, Xin and He, Yulin and Tan, Yusong},  
+  booktitle={2021 IEEE International Conference on Bioinformatics and Biomedicine (BIBM)},   
+  title={Tri-Directional Tasks Complementary Learning for Unsupervised Domain Adaptation of Cross-modality Medical Image Semantic Segmentation},   
+  year={2021},  
+  volume={},  
+  number={},  
+  pages={1406-1411},  
+  doi={10.1109/BIBM52615.2021.9669615}}
 }
 ```
 ## Demo
